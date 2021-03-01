@@ -1,7 +1,7 @@
 FROM nickgryg/alpine-pandas:3.9
 
 RUN apk update && apk add gcc python3-dev bash
-COPY requirements.txt ./
+COPY ./requirements.txt ./
 COPY data/twits.csv /usr/app/data/init/
 
 RUN pip install -r requirements.txt
