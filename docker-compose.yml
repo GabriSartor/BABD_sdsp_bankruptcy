@@ -8,8 +8,8 @@ services:
     env_file: 
       - secrets.env
     volumes:
-      - ./mongo/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
-      - ~/mongo/data:/data/db
+      - ./mongo/init/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+      - mongo-data:/data/db
     networks:
       - mongo-network
 
@@ -22,3 +22,6 @@ services:
       - mongo-network
 networks: 
   mongo-network:
+
+volumes:
+  mongo-data:
