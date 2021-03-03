@@ -11,4 +11,4 @@ db.createUser({ user:"username",
               })
               
 db.createCollection('collection_name')
-
+db.db_name.createIndex( { Text: "text" } )

@@ -13,13 +13,24 @@ services:
     networks:
       - mongo-network
 
-  twit-daemon:
-    image: twit-daemon
-    build: ./twit_daemon
+  tweet-daemon:
+    image: tweet-daemon
+    build: ./tweet_daemon
     env_file: 
       - secrets.env
     networks:
       - mongo-network
+
+  fastapi-tweet-backend:
+    image: fastapi-tweet-backend
+    build: ./fastapi_backend
+    env_file: 
+      - secrets.env
+    networks:
+      - mongo-network
+    ports:
+      - 8000:8000
+
 networks: 
   mongo-network:
 
