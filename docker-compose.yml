@@ -20,16 +20,31 @@ services:
       - secrets.env
     networks:
       - mongo-network
-
   fastapi-tweet-backend:
     image: fastapi-tweet-backend
-    build: ./fastapi_backend
+    build:
+       context: ./services/api
+    command: gunicorn main:app --bind 0.0.0.0:5000 -w 4 -k uvicorn.workers.UvicornWorker
+    expose:
+      - 80
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.fastapi.rule=Host(`api.sdps.badsartor.com`)"
+      - "traefik.http.routers.fastapi.tls=true"
+      - "traefik.http.routers.fastapi.tls.certresolver=letsencrypt"
     env_file: 
       - secrets.env
     networks:
       - mongo-network
-    ports:
-      - 8000:8000
+
+#  traefik:
+#    image: traefik:v2.2
+#    ports:
+#      - "80:80"
+#      - "443:443"
+#    volumes:
+#      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+#      - "$PWD/services/traefik/traefik.prod.toml:/etc/traefik/traefik.toml"
 
 networks: 
   mongo-network:

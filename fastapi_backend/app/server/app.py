@@ -1,4 +1,5 @@
-from fastapi import FastAPI
+from fastapi import Depends, FastAPI
+#from fastapi.security import OAuth2PasswordBearer
 
 #from .auth.jwt_bearer import JWTBearer
 from .routes.tweet import router as tweetRouter
@@ -7,6 +8,7 @@ from .routes.tweet import router as tweetRouter
 app = FastAPI()
 
 #token_listener = JWTBearer()
+#oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
 @app.get("/", tags=["Root"])
 async def read_root():

@@ -1,9 +1,20 @@
-FROM python:3.8
+FROM python:3.8.1-slim-buster
 
-ADD requirements.txt /requirements.txt
+ENV WORKDIR=/usr/src/app
+ENV USER=app
+ENV APP_HOME=/home/app/web
+ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1
 
+WORKDIR $WORKDIR
+
+RUN pip install --upgrade pip
+COPY ./requirements.txt $WORKDIR/requirements.txt
 RUN pip install -r requirements.txt
 
-COPY ./app /app
+RUN adduser --system --group $USER
+RUN mkdir $APP_HOME
+WORKDIR $APP_HOME
 
-CMD ["python", "app/main.py"]
+COPY ./app $APP_HOME
+RUN chown -R $USER:$USER $APP_HOME
+USER $USER
