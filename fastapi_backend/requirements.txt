@@ -5,3 +5,4 @@ motor==2.2.0
 python-decouple
 passlib
 bcrypt
+gunicorn

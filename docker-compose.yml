@@ -20,16 +20,23 @@ services:
       - secrets.env
     networks:
       - mongo-network
+
+  reddit-daemon:
+    image: reddit-daemon
+    build: ./reddit_daemon
+    env_file: 
+      - secrets.env
+    networks:
+      - mongo-network
+
   fastapi-tweet-backend:
     image: fastapi-tweet-backend
     build:
-       context: ./services/api
-    command: gunicorn main:app --bind 0.0.0.0:5000 -w 4 -k uvicorn.workers.UvicornWorker
-    expose:
-      - 80
+       context: ./fastapi_backend
+    command: gunicorn server.app:app --bind 0.0.0.0:5000 -w 4 -k uvicorn.workers.UvicornWorker
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.fastapi.rule=Host(`api.sdps.badsartor.com`)"
+      - "traefik.http.routers.fastapi.rule=Host(`api.sdps.nyats.dev`)"
       - "traefik.http.routers.fastapi.tls=true"
       - "traefik.http.routers.fastapi.tls.certresolver=letsencrypt"
     env_file: 
