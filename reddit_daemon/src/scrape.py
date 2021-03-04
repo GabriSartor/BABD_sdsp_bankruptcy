@@ -27,7 +27,7 @@ comm_coll = db['reddit_comments']
 
 res = sub_coll.find().sort("created_utc", -1)
 
-if len(res) > 0:
+if res.count():
     starting_time = datetime.datetime.fromtimestamp(res[0]['created_utc'])
     ending_time = starting_time + datetime.timedelta(0,600)
 
