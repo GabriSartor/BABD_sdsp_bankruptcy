@@ -71,6 +71,7 @@ data_list = load_data()
 
 if data_list:
     my_list = format_data(data_list)
+    data_list= None
 
     print("Trying to connect to Localhost")
     print("User: {} pass: {} and db {}".format(MONGO_PYTHON_DAEMON_USERNAME, MONGO_PYTHON_DAEMON_PASSWORD, MONGO_INITDB_DATABASE))
