@@ -18,6 +18,10 @@ def load_data():
     print("Found {} files".format(len(file_list)))
     df_list = list()
 
+    if DEV_MODE:
+        print("Sampling 500.000 tweets ....")
+        file_list = random.sample (file_list, 10)
+
     for file in file_list:
         print("Reading {} ..".format(file))
         df_list.append(pd.read_csv('/usr/app/data/init/{}'.format(file)))
@@ -27,9 +31,7 @@ def load_data():
 
 
 
-    if DEV_MODE:
-        print("Sampling 500.000 tweets ....")
-        df_list = random.sample (df_list, 10)
+    
 
     return df_list
 
