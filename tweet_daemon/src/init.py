@@ -49,7 +49,7 @@ def format_data(df_list):
 
 def load_in_chunks(collection, my_list):
     l =  len(my_list)
-    chunk_size = 1000
+    chunk_size = 10000
     ran = range(l)
     steps=list(ran[chunk_size::chunk_size])
     steps.extend([l])
