@@ -28,33 +28,37 @@ sub_coll.delete_many({})
 comm_coll.delete_many({})
 while ending_time < datetime.datetime.now():
     print("Fetching data from {} to {}".format(starting_time.isoformat(), ending_time.isoformat()))
-    r_sub = get_submissions(Config.URL_SUB, field_list = Config.SUBMISSION_FIELD_LIST, 
+    try:
+        r_sub = get_submissions(Config.URL_SUB, field_list = Config.SUBMISSION_FIELD_LIST, 
                                     subreddit_list = Config.SUBREDDIT_LIST, 
                                     after = int(starting_time.timestamp()), 
                                     before = int(ending_time.timestamp()))
-    print("Fetched {} reddit submissions".format(len(r_sub.json()['data'])))
-    if r_sub.json()['data']:
-        sub_coll.insert_many(r_sub.json()['data'])
-        for sub in r_sub.json()['data']:
-            print("Getting list of comments for submission {}".format(sub['id']))
-            #Get list of comments
-            r_ids = get_comments_id(Config.URL_COMMENTS_ID, sub['id'] )
-            id_list = r_ids.json()['data']
-            if id_list:
-                l =  len(id_list)
-                chunk_size = 200
-                ran = range(l)
-                steps=list(ran[chunk_size::chunk_size])
-                steps.extend([l])
+        print("Fetched {} reddit submissions".format(len(r_sub.json()['data'])))
+        if r_sub.json()['data']:
+            sub_coll.insert_many(r_sub.json()['data'])
+            for sub in r_sub.json()['data']:
+                if sub['num_comments'] > 1:
+                    print("Getting list of comments for submission {}".format(sub['id']))
+                    #Get list of comments
+                    r_ids = get_comments_id(Config.URL_COMMENTS_ID, sub['id'] )
+                    id_list = r_ids.json()['data']
+                    if id_list:
+                        l =  len(id_list)
+                        chunk_size = 200
+                        ran = range(l)
+                        steps=list(ran[chunk_size::chunk_size])
+                        steps.extend([l])
 
-                print("Found {} comments".format(len(id_list)))
-                print("Number of steps: {}".format(len(steps)))
-                # Inser chunks of the dataframe
-                i = 0
-                for j in steps:
-                    r_comments = get_comments(Config.URL_COMMENTS, field_list = Config.COMMENT_FIELD_LIST, id_list = id_list[i:j])
-                    comm_coll.insert_many(r_comments.json()['data'])
-                    i = j
+                        print("Found {} comments".format(len(id_list)))
+                        print("Number of steps: {}".format(len(steps)))
+                        # Inser chunks of the dataframe
+                        i = 0
+                        for j in steps:
+                            r_comments = get_comments(Config.URL_COMMENTS, field_list = Config.COMMENT_FIELD_LIST, id_list = id_list[i:j])
+                            comm_coll.insert_many(r_comments.json()['data'])
+                            i = j
+    except:
+        print("Error in fetching data from {} to {}".format(starting_time.isoformat(), ending_time.isoformat()))
                 
                 
             

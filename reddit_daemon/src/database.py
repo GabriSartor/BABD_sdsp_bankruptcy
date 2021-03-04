@@ -11,7 +11,7 @@ def get_submissions(url, field_list = "", subreddit_list = "", before = "", afte
     response = requests.get(url, payload)
     
     if response.status_code != 200:
-        raise Exception('API response: {}'.format(response.status_code))
+        raise Exception('API response: {}, URL: {}'.format(response.status_code, response.url))
     return response
 
 @sleep_and_retry
@@ -20,7 +20,7 @@ def get_comments_id(url, id):
     response = requests.get(url+'/{}'.format(id))
     
     if response.status_code != 200:
-        raise Exception('API response: {}'.format(response.status_code))
+        raise Exception('API response: {}, URL: {}'.format(response.status_code, response.url))
     return response
 
 @sleep_and_retry
@@ -30,5 +30,5 @@ def get_comments(url, field_list = "", id_list = ""):
     response = requests.get(url, payload)
     
     if response.status_code != 200:
-        raise Exception('API response: {}'.format(response.status_code))
+        raise Exception('API response: {}, URL: {}'.format(response.status_code, response.url))
     return response
