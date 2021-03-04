@@ -13,7 +13,7 @@ from database import get_submissions, get_comments_id, get_comments
 from config import Config
 
 starting_time = datetime.datetime(2021, 1, 1, 0, 0)
-ending_time = starting_time + datetime.timedelta(0,120)
+ending_time = starting_time + datetime.timedelta(0,600)
 
 client = MongoClient('mongo',
                     username=MONGO_PYTHON_DAEMON_USERNAME,
@@ -41,11 +41,24 @@ while ending_time < datetime.datetime.now():
             r_ids = get_comments_id(Config.URL_COMMENTS_ID, sub['id'] )
             id_list = r_ids.json()['data']
             if id_list:
+                l =  len(id_list)
+                chunk_size = 200
+                ran = range(l)
+                steps=list(ran[chunk_size::chunk_size])
+                steps.extend([l])
+
                 print("Found {} comments".format(len(id_list)))
-                r_comments = get_comments(Config.URL_COMMENTS, field_list = Config.COMMENT_FIELD_LIST, id_list = id_list)
-                comm_coll.insert_many(r_comments.json()['data'])
+                print("Number of steps: {}".format(len(steps)))
+                # Inser chunks of the dataframe
+                i = 0
+                for j in steps:
+                    r_comments = get_comments(Config.URL_COMMENTS, field_list = Config.COMMENT_FIELD_LIST, id_list = id_list[i:j])
+                    comm_coll.insert_many(r_comments.json()['data'])
+                    i = j
+                
+                
             
     starting_time = ending_time
-    ending_time = starting_time + datetime.timedelta(0,120)
+    ending_time = starting_time + datetime.timedelta(0,600)
 
 
