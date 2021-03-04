@@ -21,9 +21,24 @@ services:
     networks:
       - mongo-network
 
+  reddit-daemon:
+    image: reddit-daemon
+    build: ./reddit_daemon
+    env_file: 
+      - secrets.env
+    networks:
+      - mongo-network
+
   fastapi-tweet-backend:
     image: fastapi-tweet-backend
-    build: ./fastapi_backend
+    build:
+       context: ./fastapi_backend
+    command: gunicorn server.app:app --bind 0.0.0.0:5000 -w 4 -k uvicorn.workers.UvicornWorker
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.fastapi.rule=Host(`api.sdps.nyats.dev`)"
+      - "traefik.http.routers.fastapi.tls=true"
+      - "traefik.http.routers.fastapi.tls.certresolver=letsencrypt"
     env_file: 
       - secrets.env
     networks:
