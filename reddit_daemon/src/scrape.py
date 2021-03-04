@@ -24,8 +24,12 @@ client = MongoClient('mongo',
 db = client[MONGO_INITDB_DATABASE]
 sub_coll = db['reddit_submissions']
 comm_coll = db['reddit_comments']
-sub_coll.delete_many({})
-comm_coll.delete_many({})
+
+res = sub_coll.find().sort("created_utc", -1)
+if res:
+    starting_time = datetime.datetime.fromtimestamp(res[0]['created_utc'])
+    ending_time = starting_time + datetime.timedelta(0,600)
+
 while ending_time < datetime.datetime.now():
     print("Fetching data from {} to {}".format(starting_time.isoformat(), ending_time.isoformat()))
     try:
