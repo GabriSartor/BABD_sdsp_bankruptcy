@@ -30,7 +30,7 @@ res = sub_coll.find().sort("created_utc", -1)
 if res.count():
     starting_time = datetime.datetime.fromtimestamp(res[0]['created_utc'])
     ending_time = starting_time + datetime.timedelta(0,600)
-    
+
 try:
     while ending_time < datetime.datetime.now():
         print("Fetching data from {} to {}".format(starting_time.isoformat(), ending_time.isoformat()))
@@ -65,12 +65,14 @@ try:
                                 i = j
         except:
             print("Error in fetching data from {} to {}".format(starting_time.isoformat(), ending_time.isoformat()))
+        starting_time = ending_time
+        ending_time = starting_time + datetime.timedelta(0,600)
 except KeyboardInterrupt:
     print("Press Ctrl-C to terminate while statement")
     pass              
-                
+          
+      
             
-    starting_time = ending_time
-    ending_time = starting_time + datetime.timedelta(0,600)
+    
 
 
