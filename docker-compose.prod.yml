@@ -1,0 +1,76 @@
+version: '3'
+services:
+  mongo:
+    image: mongo
+    restart: always
+    ports: 
+      - 27017:27017
+    env_file: 
+      - secrets.env
+    volumes:
+      - ./mongo/init/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+      - mongo-data:/data/db
+    networks:
+      - mongo-network
+
+  reddit-daemon:
+    image: reddit-daemon
+    build: ./reddit_daemon
+    env_file: 
+      - secrets.env
+    depends_on:
+      - mongo
+    networks:
+      - mongo-network
+
+  fastapi-tweet-backend:
+    image: fastapi-tweet-backend
+    build:
+       context: ./fastapi_backend
+    env_file:
+      - secrets.env
+    expose:
+      - 5000
+    networks:
+      - mongo-network
+      - default
+      - redis-network
+    depends_on: 
+      - redis
+      - mongo
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.fastapi.rule=Host(`babd.sdps.api.nyats.dev`)"
+      - "traefik.http.routers.fastapi.tls.certresolver=letsencrypt"
+
+  traefik:
+    image: traefik:v2.2
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      - "./services/traefik/traefik.prod.toml:/etc/traefik/traefik.toml"
+    networks:
+      - default
+
+  redis:
+    image: redislabs/rejson
+    networks:
+      - redis-network
+
+  redis-commander:
+    image: rediscommander/redis-commander:latest
+    environment:
+      - REDIS_HOSTS=local:redis:6379
+    ports:
+      - "8081:8081"
+    networks:
+      - redis-network
+
+networks: 
+  mongo-network:
+  redis-network:
+
+volumes:
+  mongo-data:
