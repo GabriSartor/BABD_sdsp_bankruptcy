@@ -35,14 +35,28 @@ services:
        context: ./fastapi_backend
     env_file:
       - secrets.env
-    ports:
-      - 8000:8000
+    expose:
+      - 5000
     networks:
       - mongo-network
+      - default
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.fastapi.rule=Host(`fastapi.localhost`)"
+
+  traefik:
+    image: traefik:v2.2
+    ports:
+      - "80:80"
+      - "8080:8080"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      - "./services/traefik/traefik.dev.toml:/etc/traefik/traefik.toml"
+    networks:
+      - default
 
 networks: 
   mongo-network:
-  web-network:
 
 volumes:
   mongo-data:

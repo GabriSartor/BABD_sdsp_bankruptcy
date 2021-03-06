@@ -1,13 +1,3 @@
-def tweets_helper(tweet) -> dict:
-    return {
-        "mongo_id": str(tweet['_id']),
-        "author": tweet['User'],
-        "text": tweet['Text'],
-        "positivity": tweet['Positivity_score'],
-        "date": tweet['DateTime'],
-        "tweet_id": tweet['Twitter_ID']
-    }
-
 def reddit_submission_helper(red) -> dict:
     return {
         "mongo_id": str(red['_id']),
@@ -38,4 +28,5 @@ def reddit_comment_helper(red) -> dict:
         "subreddit": red['subreddit'],
         "distinguished": red['distinguished']
     }
+
 
