@@ -19,5 +19,4 @@
 [certificatesResolvers.letsencrypt.acme]
   email = "gabrielesartor4@gmail.com"
   storage= "acme.json"
-  [certificatesResolvers.letsencrypt.acme.httpChallenge]
-    entryPoint = "web"
+  [certificatesResolvers.letsencrypt.acme.tlsChallenge]

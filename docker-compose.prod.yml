@@ -40,8 +40,10 @@ services:
       - mongo
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.fastapi.rule=Host(`babd.sdps.api.nyats.dev`)"
-      - "traefik.http.routers.fastapi.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.fastapi.rule=Host(`babd.nyats.dev`)"
+      - traefik.http.routers.fastapi.entrypoints=websecure
+      - traefik.http.routers.fastapi.tls=true
+      - traefik.http.routers.fastapi.tls.certresolver=default
 
   traefik:
     image: traefik:v2.2
