@@ -4,6 +4,7 @@ from server.security import validate_request
 
 from server.database.database import retrieve_reddit_submissions, retrieve_reddit_submission, retrieve_reddit_daily_aggregated_submissions, retrieve_reddit_top_daily_submission
 from server.models.reddit_submission import ResponseModel, ErrorResponseModel
+from server.database.db_redis import cache_top_daily_submission, update_cache_top_daily_submission
 
 import datetime
 
@@ -27,8 +28,17 @@ async def get_daily_aggregated_count(authenticated: bool = Depends(validate_requ
 
 @router.get("/daily/top/")
 async def get_daily_top_submission(authenticated: bool = Depends(validate_request), day: Optional[datetime.date] = None, subreddit: Optional[str] = None):
+    if not day:
+        day = datetime.date.today()
+    redis_res = cache_top_daily_submission(day, subreddit)
+    if redis_res:
+        return ResponseModel(redis_res, "reddit top submission data retrieved successfully")
+    
+    print("Cache not available, going to MongoDB")
     sub = await retrieve_reddit_top_daily_submission(day= day, subreddit = subreddit)
-    return ResponseModel(sub, "reddit top submission data retrieved successfully") \
+    print("Updating cache (HOPEFULLY)")
+    update_cache_top_daily_submission(day=day, subreddit=subreddit, obj = sub)
+    return ResponseModel(sub, "reddit submission data retrieved successfully") \
         if sub \
         else ErrorResponseModel("An error occured.", 404, "submission doesn'exist.")
 

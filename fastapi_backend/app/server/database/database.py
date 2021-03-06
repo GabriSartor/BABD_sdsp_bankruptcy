@@ -191,7 +191,7 @@ async def retrieve_reddit_top_daily_submission(day:date=None, subreddit: str = N
 
     agg_pipeline.append({'$sort': {'score': -1}})
     agg_pipeline.append({'$limit': 1})
-    
+    print(agg_pipeline)
     red_sub = reddit_submissions_collection.aggregate(agg_pipeline)
     items = await red_sub.to_list(1)
     if items:

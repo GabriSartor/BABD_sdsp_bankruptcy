@@ -13,19 +13,13 @@ services:
     networks:
       - mongo-network
 
-  tweet-daemon:
-    image: tweet-daemon
-    build: ./tweet_daemon
-    env_file: 
-      - secrets.env
-    networks:
-      - mongo-network
-
   reddit-daemon:
     image: reddit-daemon
     build: ./reddit_daemon
     env_file: 
       - secrets.env
+    depends_on:
+      - mongo
     networks:
       - mongo-network
 
@@ -40,6 +34,10 @@ services:
     networks:
       - mongo-network
       - default
+      - redis-network
+    depends_on: 
+      - redis
+      - mongo
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.fastapi.rule=Host(`fastapi.localhost`)"
@@ -55,8 +53,23 @@ services:
     networks:
       - default
 
+  redis:
+    image: redislabs/rejson
+    networks:
+      - redis-network
+
+  redis-commander:
+    image: rediscommander/redis-commander:latest
+    environment:
+      - REDIS_HOSTS=local:redis:6379
+    ports:
+      - "8081:8081"
+    networks:
+      - redis-network
+
 networks: 
   mongo-network:
+  redis-network:
 
 volumes:
   mongo-data:
