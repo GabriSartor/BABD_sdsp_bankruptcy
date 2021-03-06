@@ -33,21 +33,16 @@ services:
     image: fastapi-tweet-backend
     build:
        context: ./fastapi_backend
-    command: gunicorn server.app:app --bind 0.0.0.0:5000 -w 4 -k uvicorn.workers.UvicornWorker
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.fastapi.rule=Host(`api.sdps.nyats.dev`)"
-      - "traefik.http.routers.fastapi.tls=true"
-      - "traefik.http.routers.fastapi.tls.certresolver=letsencrypt"
-    env_file: 
+    env_file:
       - secrets.env
-    networks:
-      - mongo-network
     ports:
       - 8000:8000
+    networks:
+      - mongo-network
 
 networks: 
   mongo-network:
+  web-network:
 
 volumes:
   mongo-data:
