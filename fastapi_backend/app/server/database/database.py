@@ -119,7 +119,7 @@ async def retrieve_reddit_daily_aggregated_submissions(skip=0, limit=20, search:
     
     print(agg_pipeline)
     result = list()
-    cursor = reddit_submissions_collection.aggregate(agg_pipeline, { "allowDiskUse" : True })
+    cursor = reddit_submissions_collection.aggregate(agg_pipeline, allowDiskUse=True))
     items = await cursor.to_list(length=500)
     return items
     
@@ -171,7 +171,7 @@ async def retrieve_reddit_daily_aggregated_comments(skip=0, limit=20, search:str
     agg_pipeline.append({'$sort': {'best_score': -1} } )
     
     result = list()
-    cursor = reddit_comments_collection.aggregate(agg_pipeline, { "allowDiskUse" : True })
+    cursor = reddit_comments_collection.aggregate(agg_pipeline, allowDiskUse=True))
     items = await cursor.to_list(length=500)
     return items
 
@@ -192,7 +192,7 @@ async def retrieve_reddit_top_daily_submission(day:date=None, subreddit: str = N
     agg_pipeline.append({'$sort': {'score': -1}})
     agg_pipeline.append({'$limit': 1})
     print(agg_pipeline)
-    red_sub = reddit_submissions_collection.aggregate(agg_pipeline, { "allowDiskUse" : True })
+    red_sub = reddit_submissions_collection.aggregate(agg_pipeline, allowDiskUse=True))
     items = await red_sub.to_list(1)
     if items:
         return reddit_submission_helper(items[0])
