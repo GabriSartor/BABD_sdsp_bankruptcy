@@ -6,7 +6,7 @@
  * Matteo Gatto
  * Federico Pomè
  * Fabio Dopudi
- * 
+
 # Main components
  The project aims to exploit scalable technologies both for storing data and processing them.
  A MongoDB instance is populated with data from reddit through a daemon script in python and the data can be accessed using an API developed with the [FastAPI Framework](https://fastapi.tiangolo.com/).
