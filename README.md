@@ -21,7 +21,10 @@
     ```bash
     cp mongo/init/mongo-init.example.js mongo/init/mongo-init.js
     ```
- 2. Create secrets.env file and fill it with Mongo credentials and an API-key (You can generate one using [uuid4](https://www.uuidgenerator.net/)
+ 2. Create secrets.env file and fill it with Mongo credentials and an API-key (You can generate one using [uuid4](https://www.uuidgenerator.net/))
+    ```bash
+    cp secrets.example.env secrets.env
+    ```
  3. Edit docker-compose files with your domain and services/traefik/traefik.prod.toml with your personal email account
  4. Run `docker-compose up -d --build`
 
