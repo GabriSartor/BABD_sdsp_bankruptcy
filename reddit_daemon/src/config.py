@@ -36,5 +36,4 @@ class Config:
                     "economics",
                     "economy",
                     "business",
-                    "news",
-                    "politics"] 
+                    "news"] 

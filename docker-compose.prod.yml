@@ -23,14 +23,14 @@ services:
     networks:
       - mongo-network
 
-  fastapi-tweet-backend:
-    image: fastapi-tweet-backend
+  fastapi-reddit-backend:
+    image: fastapi-reddit-backend
     build:
        context: ./fastapi_backend
     env_file:
       - secrets.env
-    expose:
-      - 5000
+    ports:
+      - "5000:5000"
     networks:
       - mongo-network
       - default
@@ -40,8 +40,11 @@ services:
       - mongo
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.fastapi.rule=Host(`babd.sdps.api.nyats.dev`)"
-      - "traefik.http.routers.fastapi.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.fastapi.rule=Host(`babd.nyats.dev`)"
+      - traefik.http.routers.fastapi.entrypoints=websecure
+      - traefik.http.routers.fastapi.tls=true
+      - traefik.http.routers.fastapi.tls.certresolver=letsencrypt
+      - traefik.docker.network=babd_sdsp_bankruptcy_default
 
   traefik:
     image: traefik:v2.2
@@ -67,6 +70,14 @@ services:
       - "8081:8081"
     networks:
       - redis-network
+      - default
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.redis.rule=Host(`redis.nyats.dev`)"
+      - traefik.http.routers.redis.entrypoints=websecure
+      - traefik.http.routers.redis.tls=true
+      - traefik.http.routers.redis.tls.certresolver=letsencrypt
+      - traefik.docker.network=babd_sdsp_bankruptcy_default
 
 networks: 
   mongo-network:
