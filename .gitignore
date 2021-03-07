@@ -127,3 +127,4 @@ dmypy.json
 # Mongo credentials
 secrets.env
 mongo-init.js
+docker-compose.prod.yml
