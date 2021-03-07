@@ -69,10 +69,10 @@ services:
       - default
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.fastapi.rule=Host(`redis.nyats.dev`)"
-      - traefik.http.routers.fastapi.entrypoints=websecure
-      - traefik.http.routers.fastapi.tls=true
-      - traefik.http.routers.fastapi.tls.certresolver=letsencrypt
+      - "traefik.http.routers.redis.rule=Host(`redis.nyats.dev`)"
+      - traefik.http.routers.redis.entrypoints=websecure
+      - traefik.http.routers.redis.tls=true
+      - traefik.http.routers.redis.tls.certresolver=letsencrypt
       - traefik.docker.network=babd_sdsp_bankruptcy_default
 
 networks: 
