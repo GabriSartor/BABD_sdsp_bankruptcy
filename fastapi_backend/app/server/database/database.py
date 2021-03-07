@@ -119,7 +119,7 @@ async def retrieve_reddit_daily_aggregated_submissions(skip=0, limit=20, search:
     
     print(agg_pipeline)
     result = list()
-    cursor = reddit_submissions_collection.aggregate(agg_pipeline, { "allowDiskUse" : true })
+    cursor = reddit_submissions_collection.aggregate(agg_pipeline, { "allowDiskUse" : True })
     items = await cursor.to_list(length=500)
     return items
     
@@ -171,7 +171,7 @@ async def retrieve_reddit_daily_aggregated_comments(skip=0, limit=20, search:str
     agg_pipeline.append({'$sort': {'best_score': -1} } )
     
     result = list()
-    cursor = reddit_comments_collection.aggregate(agg_pipeline, { "allowDiskUse" : true })
+    cursor = reddit_comments_collection.aggregate(agg_pipeline, { "allowDiskUse" : True })
     items = await cursor.to_list(length=500)
     return items
 
