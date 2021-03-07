@@ -29,8 +29,6 @@ services:
        context: ./fastapi_backend
     env_file:
       - secrets.env
-    ports:
-      - "5000:5000"
     networks:
       - mongo-network
       - default
@@ -44,6 +42,7 @@ services:
       - traefik.http.routers.fastapi.entrypoints=websecure
       - traefik.http.routers.fastapi.tls=true
       - traefik.http.routers.fastapi.tls.certresolver=letsencrypt
+      - traefik.docker.network=babd_sdsp_bankruptcy_default
 
   traefik:
     image: traefik:v2.2
@@ -65,10 +64,16 @@ services:
     image: rediscommander/redis-commander:latest
     environment:
       - REDIS_HOSTS=local:redis:6379
-    ports:
-      - "8081:8081"
     networks:
       - redis-network
+      - default
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.fastapi.rule=Host(`redis.nyats.dev`)"
+      - traefik.http.routers.fastapi.entrypoints=websecure
+      - traefik.http.routers.fastapi.tls=true
+      - traefik.http.routers.fastapi.tls.certresolver=letsencrypt
+      - traefik.docker.network=babd_sdsp_bankruptcy_default
 
 networks: 
   mongo-network:
