@@ -1,7 +1,5 @@
 # BABD-Scalabale-data-and-processing
  Project for BABD Master @ MIP - Politecnico di Milano
-<<<<<<< Updated upstream
-=======
 
 # Main components
  The project aims to exploit scalable technologies both for storing data and processing them.
@@ -24,4 +22,3 @@
 # Future possible developments
  * Deploy the ML model and make it available through the API for real-time and custom predictions
  
->>>>>>> Stashed changes
