@@ -29,8 +29,8 @@ services:
        context: ./fastapi_backend
     env_file:
       - secrets.env
-    expose:
-      - 5000
+    ports:
+      - "5000:5000"
     networks:
       - mongo-network
       - default
@@ -43,7 +43,7 @@ services:
       - "traefik.http.routers.fastapi.rule=Host(`babd.nyats.dev`)"
       - traefik.http.routers.fastapi.entrypoints=websecure
       - traefik.http.routers.fastapi.tls=true
-      - traefik.http.routers.fastapi.tls.certresolver=default
+      - traefik.http.routers.fastapi.tls.certresolver=letsencrypt
 
   traefik:
     image: traefik:v2.2
