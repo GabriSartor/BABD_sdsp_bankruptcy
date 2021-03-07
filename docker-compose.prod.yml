@@ -23,12 +23,14 @@ services:
     networks:
       - mongo-network
 
-  fastapi-tweet-backend:
-    image: fastapi-tweet-backend
+  fastapi-reddit-backend:
+    image: fastapi-reddit-backend
     build:
        context: ./fastapi_backend
     env_file:
       - secrets.env
+    ports:
+      - "5000:5000"
     networks:
       - mongo-network
       - default
@@ -64,6 +66,8 @@ services:
     image: rediscommander/redis-commander:latest
     environment:
       - REDIS_HOSTS=local:redis:6379
+    ports:
+      - "8081:8081"
     networks:
       - redis-network
       - default
