@@ -1,5 +1,6 @@
 # BABD-Scalabale-data-and-processing
- Project for BABD Master @ MIP - Politecnico di Milano
+ Project for BABD Master @ MIP - Politecnico di Milano.
+ 
  Designed, developed and tested by:
  * Gabriele Sartor
  * Matteo Canale
